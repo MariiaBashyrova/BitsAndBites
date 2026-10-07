@@ -18,6 +18,10 @@ public class Getraenk : Posten
     public override double BerechnePreis()
     {
         //Liefert 75 % des Grundpreises, wenn das Getränk alkoholisch ist und während der Happy Hour bestellt wurde, sonst den Grundpreis.
+        if (alkoholisch && happyhour)
+        {
+            return Math.Round(Preis * 0.75, 2);
+        }
         return Preis;
     }
 }

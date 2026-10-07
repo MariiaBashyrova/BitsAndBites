@@ -16,6 +16,10 @@ public class Essen : Posten
     public override double BerechnePreis()
     {
         //Liefert bei „Extra Groß" den Grundpreis zuzüglich 20 % Aufschlag, sonst den Grundpreis.
+        if (extragross)
+        {
+            return Math.Round(Preis * 1.2, 2);
+        }
         return Preis;
     }
 }

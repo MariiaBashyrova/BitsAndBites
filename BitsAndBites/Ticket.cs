@@ -17,7 +17,7 @@ public class Ticket : Posten
     protected override double Preis => preis;
     public override double BerechnePreis()
     {
-        return Preis;
+        return Math.Round(Preis * minuten, 2);
         //Liefert den Grundpreis multipliziert mit der Anzahl der Minuten.
     }
 }

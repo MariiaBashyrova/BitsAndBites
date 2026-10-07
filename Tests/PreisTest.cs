@@ -52,10 +52,9 @@ public class PreisTest
         Bestellung bestellung = new Bestellung(BonusCard);
         if (mitPosten)
         {
-            bestellung.FuegePostenHinzu(new Getraenk("Cola", 3.00, false, true));
-            bestellung.FuegePostenHinzu(new Getraenk("Bier", 4.00, true, false));
-            bestellung.FuegePostenHinzu(new Essen("Pizza", 8.50, true));
-            bestellung.FuegePostenHinzu(new Ticket("Kurzticket", 0.05, new TimeOnly(14, 0), 60));
+            bestellung.FuegePostenHinzu(new Getraenk("Bier", 4.00, true, true)); //3.00
+            bestellung.FuegePostenHinzu(new Essen("Pizza", 8.50, true)); //10.20
+            bestellung.FuegePostenHinzu(new Ticket("Kurzticket", 0.05, new TimeOnly(14, 0), 60)); //3.00
         }
 
         double ergebnis = bestellung.BerechneBestellung();
