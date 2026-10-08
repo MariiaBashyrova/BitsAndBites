@@ -2,7 +2,10 @@
 
 public class  Bestellung
 {
+    const double CARD_RABATT = 0.05; // 5% Rabatt
     private bool bitandbitecard;
+    public bool Bitandbitecard => bitandbitecard;
+
     private List<Posten> bestellposten;
     public Bestellung(bool bitandbitecard)
     {
@@ -29,7 +32,7 @@ public class  Bestellung
         //}
         //return summe;
         double summe = bestellposten.Sum(p => p.BerechnePreis());
-        summe *= bitandbitecard ? 0.95 : 1; // 5% Rabatt, wenn bitandbitecard true ist
+        summe *= bitandbitecard ?  1 - CARD_RABATT : 1; // 5% Rabatt, wenn bitandbitecard true ist
         return Math.Round(summe, 2);
     }
 
@@ -49,4 +52,15 @@ public class  Bestellung
     }
 
     public List<Posten> Bestellposten => new List<Posten>(bestellposten); // Gibt eine Kopie der Liste zurück, um die Kapselung zu wahren
+
+    public double BerechneCardRabatt()
+    {
+        if (!bitandbitecard)
+        {
+            return 0;
+        }
+        double summe = bestellposten.Sum(p => p.BerechnePreis());
+        double rabatt = summe * CARD_RABATT; // 5% Rabatt
+        return Math.Round(rabatt, 2);
+    }
 }

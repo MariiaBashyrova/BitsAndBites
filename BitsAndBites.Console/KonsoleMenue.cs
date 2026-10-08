@@ -128,7 +128,35 @@ public class KonsoleMenue
             aktuelleBestellung.EntfernePosten(index);
     }
 
-    private void BestellungAnzeigen() { }
+    private void BestellungAnzeigen() 
+    {
+        if (aktuelleBestellung.Bestellposten.Count == 0)
+        {
+            Console.WriteLine("Keine Posten in der Bestellung.");
+            return;
+        }
+        Console.WriteLine();
+        Console.WriteLine("=========================================================");
+        Console.WriteLine("               Internetcafé 'Bits & Bites'");
+        Console.WriteLine("=========================================================");
+        Console.WriteLine("Posten");
+        Console.WriteLine("---------------------------------------------------------");
+
+        foreach (Posten posten in aktuelleBestellung.Bestellposten)
+        {
+            Console.WriteLine($"{posten.GetDetails(),-43}  {posten.BerechnePreis(),8:F2} EUR");
+        }
+        Console.WriteLine("---------------------------------------------------------");
+        if (aktuelleBestellung.Bitandbitecard)
+        {
+            double rabatt = aktuelleBestellung.BerechneCardRabatt();
+            Console.WriteLine($"Card-Rabatt:                                 {rabatt,8:F2} EUR");
+        }
+
+        Console.WriteLine($"Gesamtbetrag:                                {aktuelleBestellung.BerechneBestellung(),8:F2} EUR");
+        Console.WriteLine("=========================================================");
+    }
+    
 
     private void CardUmschalten() 
     {

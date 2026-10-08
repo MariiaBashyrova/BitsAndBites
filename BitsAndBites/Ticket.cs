@@ -23,6 +23,6 @@ public class Ticket : Posten
 
     public override string GetDetails()
     {
-        return $"Ticket: {Name}, Preis: {BerechnePreis():C}, Startzeit: {startzeit}, Dauer: {minuten} Minuten";
+        return $"Ticket: {Name}, Startzeit: {startzeit}, {minuten} Min";
     }
 }
