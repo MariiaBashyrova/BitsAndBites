@@ -1,4 +1,4 @@
-# BitsAndBites
+# Bits & Bites
 ## Optionale Erweiterungen
 
 Folgende optionale Erweiterungen wurden umgesetzt:
