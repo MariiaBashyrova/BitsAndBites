@@ -5,6 +5,7 @@ public class Essen : Posten
     private string name;
     private double preis;
     private bool extragross;
+    const double EXTRAGROSS_AUFSCHLAG = 1.2; // 20% Aufschlag für Extra Groß
     public Essen(string name, double preis, bool extragross)
     {
         this.name = name;
@@ -18,7 +19,7 @@ public class Essen : Posten
         //Liefert bei „Extra Groß" den Grundpreis zuzüglich 20 % Aufschlag, sonst den Grundpreis.
         if (extragross)
         {
-            return Math.Round(Preis * 1.2, 2);
+            return Math.Round(Preis * EXTRAGROSS_AUFSCHLAG, 2);
         }
         return Preis;
     }

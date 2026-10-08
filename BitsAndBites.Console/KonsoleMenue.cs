@@ -9,6 +9,7 @@ namespace BitsAndBites.KonsolenApp;
 
 public class KonsoleMenue
 {
+    public enum MenuePunkt { GetraenkHinzufuegen = 1, EssenHinzufuegen, TicketHinzufuegen, PostenEntfernen, Anzeigen, CardUmschalten, Uebermitteln, Beenden }
     private Bestellung aktuelleBestellung = new Bestellung(false); // Standardmäßig wird eine Bestellung ohne Karte erstellt
     public void Start()
     {
@@ -19,39 +20,39 @@ public class KonsoleMenue
         {
             ZeigeMenue();
 
-            int auswahl = LeseInt("Ihre Auswahl: ",1, 8);
+            MenuePunkt auswahl = (MenuePunkt)LeseInt("Ihre Auswahl: ",1, 8);
 
             switch (auswahl)
             {
-                case 1:
+                case MenuePunkt.GetraenkHinzufuegen:
                     GetraenkHinzufuegen();
                     break;
 
-                case 2:
+                case MenuePunkt.EssenHinzufuegen:
                     EssenHinzufuegen();
                     break;
 
-                case 3:
+                case MenuePunkt.TicketHinzufuegen:
                     InternetticketHinzufuegen();
                     break;
 
-                case 4:
+                case MenuePunkt.PostenEntfernen:
                     PostenEntfernen();
                     break;
 
-                case 5:
+                case MenuePunkt.Anzeigen:
                     BestellungAnzeigen();
                     break;
 
-                case 6:
+                case MenuePunkt.CardUmschalten:
                     CardUmschalten();
                     break;
 
-                case 7:
+                case MenuePunkt.Uebermitteln:
                     BestellungUebermitteln();
                     break;
 
-                case 8:
+                case MenuePunkt.Beenden:
                     laeuft = false;
                     break;
 
@@ -164,6 +165,11 @@ public class KonsoleMenue
     }
     private void BestellungUebermitteln() 
     {
+        if (aktuelleBestellung.Bestellposten.Count == 0)
+        {
+            Console.WriteLine("Keine Posten in der Bestellung.");
+            return;
+        }
         BestellungAnzeigen();
         Console.WriteLine($"Übermittelt am: {DateTime.Now:dd.MM.yyyy HH:mm:ss}");
         aktuelleBestellung = new Bestellung(false); // Neue Bestellung ohne Karte erstellen
