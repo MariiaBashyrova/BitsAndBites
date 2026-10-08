@@ -25,6 +25,6 @@ public class Essen : Posten
 
     public override string GetDetails()
     {
-        return $"Essen: {Name}{(extragross ? ",Extra Groß" : "")}";
+        return $"Essen: {Name}{(extragross ? ", Extra Groß" : "")}";
     }
 }

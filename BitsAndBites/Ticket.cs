@@ -23,6 +23,6 @@ public class Ticket : Posten
 
     public override string GetDetails()
     {
-        return $"Ticket: {Name}, Startzeit: {startzeit}, {minuten} Min";
+        return $"Ticket: {Name}, SZ: {startzeit}, {minuten} Min";
     }
 }

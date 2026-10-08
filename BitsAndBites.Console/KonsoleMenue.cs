@@ -150,7 +150,7 @@ public class KonsoleMenue
         if (aktuelleBestellung.Bitandbitecard)
         {
             double rabatt = aktuelleBestellung.BerechneCardRabatt();
-            Console.WriteLine($"Card-Rabatt:                                 {rabatt,8:F2} EUR");
+            Console.WriteLine($"Card-Rabatt:                                -{rabatt,8:F2} EUR");
         }
 
         Console.WriteLine($"Gesamtbetrag:                                {aktuelleBestellung.BerechneBestellung(),8:F2} EUR");
@@ -162,7 +162,12 @@ public class KonsoleMenue
     {
         Console.WriteLine($"Bits & Bites-Card ist jetzt {(aktuelleBestellung.KarteUmschalten() ? "aktiv" : "inaktiv")}");
     }
-    private void BestellungUebermitteln() { }
+    private void BestellungUebermitteln() 
+    {
+        BestellungAnzeigen();
+        Console.WriteLine($"Übermittelt am: {DateTime.Now:dd.MM.yyyy HH:mm:ss}");
+        aktuelleBestellung = new Bestellung(false); // Neue Bestellung ohne Karte erstellen
+    }
 
     static int LeseInt(string frage, int min, int max)
     {
@@ -199,7 +204,7 @@ public class KonsoleMenue
         double zahl;
         while (true)
         {
-            if (!double.TryParse(Console.ReadLine(), out zahl))
+            if (!double.TryParse(Console.ReadLine().Replace('.', ','), out zahl))
             {
                 Console.Write("Ungültige Eingabe. Bitte eine Zahl eingeben: ");
             }
