@@ -24,4 +24,9 @@ public class Getraenk : Posten
         }
         return Preis;
     }
+
+    public override string GetDetails()
+    {
+        return $"Getränk: {Name}, Preis: {BerechnePreis():C}, {(alkoholisch ? "alkoholisch" : "")}, {(happyhour ? "Happy Hour" : "")}";
+    }
 }

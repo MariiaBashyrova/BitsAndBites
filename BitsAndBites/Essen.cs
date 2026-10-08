@@ -22,4 +22,9 @@ public class Essen : Posten
         }
         return Preis;
     }
+
+    public override string GetDetails()
+    {
+        return $"Essen: {Name}, Preis: {BerechnePreis():C}, {(extragross ? "Extra Groß" : "")}";
+    }
 }

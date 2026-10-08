@@ -110,7 +110,23 @@ public class KonsoleMenue
         aktuelleBestellung.FuegePostenHinzu(ticket);
     }
 
-    private void PostenEntfernen() { }
+    private void PostenEntfernen() 
+    {
+        int count = 0;
+        foreach (var posten in aktuelleBestellung.Bestellposten)
+        {
+            Console.WriteLine($"{count + 1}. {posten.GetDetails()}");
+            count++;
+        }
+        if (count == 0)
+        {
+            Console.WriteLine("Keine Posten in der Bestellung.");
+            return;
+        }
+        int index = LeseInt("Welchen Posten möchten Sie entfernen? ", 1, aktuelleBestellung.Bestellposten.Count) - 1;
+        if (LeseJaNein($"Sind Sie sicher, dass Sie {aktuelleBestellung.Bestellposten[index].GetDetails()} entfernen möchten?"))
+            aktuelleBestellung.EntfernePosten(index);
+    }
 
     private void BestellungAnzeigen() { }
 

@@ -38,4 +38,15 @@ public class  Bestellung
         bitandbitecard = !bitandbitecard;
         return bitandbitecard;
     }
+
+    public void EntfernePosten(int index)
+    {
+        if (index < 0 || index >= bestellposten.Count)
+        {
+            throw new ArgumentOutOfRangeException(nameof(index), "Index liegt außerhalb des gültigen Bereichs.");
+        }
+        bestellposten.RemoveAt(index);
+    }
+
+    public List<Posten> Bestellposten => new List<Posten>(bestellposten); // Gibt eine Kopie der Liste zurück, um die Kapselung zu wahren
 }

@@ -20,4 +20,9 @@ public class Ticket : Posten
         return Math.Round(Preis * minuten, 2);
         //Liefert den Grundpreis multipliziert mit der Anzahl der Minuten.
     }
+
+    public override string GetDetails()
+    {
+        return $"Ticket: {Name}, Preis: {BerechnePreis():C}, Startzeit: {startzeit}, Dauer: {minuten} Minuten";
+    }
 }
