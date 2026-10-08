@@ -8,12 +8,16 @@ public class Essen : Posten
     const double EXTRAGROSS_AUFSCHLAG = 1.2; // 20% Aufschlag für Extra Groß
     public Essen(string name, double preis, bool extragross)
     {
-        this.name = name;
-        this.preis = preis;
+        Name = name;
+        Preis = preis;
         this.extragross = extragross;
     }
-    protected override string Name => name;
-    protected override double Preis => preis;
+    protected override string Name { get => name; set => name = string.IsNullOrWhiteSpace(value) ? throw new ArgumentException("Name darf nicht leer sein.", nameof(value)) : value; }
+    protected override double Preis
+    {
+        get => preis; set => preis = value <= 0 ? throw new ArgumentOutOfRangeException(nameof(value),
+            $"Preis {value} ist ungültig.") : value;
+    }
     public override double BerechnePreis()
     {
         //Liefert bei „Extra Groß" den Grundpreis zuzüglich 20 % Aufschlag, sonst den Grundpreis.

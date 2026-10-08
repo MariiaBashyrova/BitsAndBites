@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 using BitsAndBites;
 
 namespace BitsAndBites.KonsolenApp;
-
+public enum MenuePunkt { GetraenkHinzufuegen = 1, EssenHinzufuegen, TicketHinzufuegen, PostenEntfernen, Anzeigen, CardUmschalten, Uebermitteln, Beenden }
 public class KonsoleMenue
 {
-    public enum MenuePunkt { GetraenkHinzufuegen = 1, EssenHinzufuegen, TicketHinzufuegen, PostenEntfernen, Anzeigen, CardUmschalten, Uebermitteln, Beenden }
+
     private Bestellung aktuelleBestellung = new Bestellung(false); // Standardmäßig wird eine Bestellung ohne Karte erstellt
     public void Start()
     {
-        
+
         bool laeuft = true;
 
         while (laeuft)
         {
             ZeigeMenue();
 
-            MenuePunkt auswahl = (MenuePunkt)LeseInt("Ihre Auswahl: ",1, 8);
+            MenuePunkt auswahl = (MenuePunkt)LeseInt("Ihre Auswahl: ", 1, 8);
 
             switch (auswahl)
             {
@@ -63,7 +63,7 @@ public class KonsoleMenue
         }
     }
 
-    private void ZeigeMenue() 
+    private void ZeigeMenue()
     {
         Console.WriteLine();
         Console.WriteLine("=== Bits & Bites – Bestellung ===");
@@ -75,43 +75,62 @@ public class KonsoleMenue
         Console.WriteLine("6. Bits & Bites-Card an/aus");
         Console.WriteLine("7. Bestellung an die Theke übermitteln");
         Console.WriteLine("8. Beenden");
-        
+
     }
 
-    private void GetraenkHinzufuegen() 
+    private void GetraenkHinzufuegen()
     {
         string name = LeseName();
         double preis = LesePreis();
 
         bool alkoholisch = LeseJaNein("Alkoholisch?");
         bool happyHour = LeseJaNein("Happy Hour?");
-
-        Getraenk getraenk = new Getraenk(name, preis, alkoholisch, happyHour);
-        aktuelleBestellung.FuegePostenHinzu(getraenk);
+        try
+        {
+            Getraenk getraenk = new Getraenk(name, preis, alkoholisch, happyHour);
+            aktuelleBestellung.FuegePostenHinzu(getraenk);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Fehler beim Hinzufügen des Getränks: {ex.Message}");
+        }
     }
-    private void EssenHinzufuegen() 
+    private void EssenHinzufuegen()
     {
         string name = LeseName();
         double preis = LesePreis();
 
         bool extraGross = LeseJaNein("Extra groß?");
+        try
+        {
+            Essen essen = new Essen(name, preis, extraGross);
+            aktuelleBestellung.FuegePostenHinzu(essen);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Fehler beim Hinzufügen des Essens: {ex.Message}");
+        }
+
         
-        Essen essen = new Essen(name, preis, extraGross);
-        aktuelleBestellung.FuegePostenHinzu(essen);
 
     }
-    private void InternetticketHinzufuegen() 
+    private void InternetticketHinzufuegen()
     {
         string name = LeseName();
         double preis = LesePreis();
         TimeOnly startzeit = LeseStartzeit();
-        int minuten = LeseInt("Minuten? ",1, 1440);
-
-        Ticket ticket = new Ticket(name, preis, startzeit, minuten);
-        aktuelleBestellung.FuegePostenHinzu(ticket);
+        int minuten = LeseInt("Minuten? ", 1, 1440);
+        try 
+        {   Ticket ticket = new Ticket(name, preis, startzeit, minuten);
+            aktuelleBestellung.FuegePostenHinzu(ticket);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Fehler beim Hinzufügen des Tickets: {ex.Message}");
+        }
     }
 
-    private void PostenEntfernen() 
+    private void PostenEntfernen()
     {
         int count = 0;
         foreach (var posten in aktuelleBestellung.Bestellposten)
@@ -129,7 +148,7 @@ public class KonsoleMenue
             aktuelleBestellung.EntfernePosten(index);
     }
 
-    private void BestellungAnzeigen() 
+    private void BestellungAnzeigen()
     {
         if (aktuelleBestellung.Bestellposten.Count == 0)
         {
@@ -157,13 +176,13 @@ public class KonsoleMenue
         Console.WriteLine($"Gesamtbetrag:                                {aktuelleBestellung.BerechneBestellung(),8:F2} EUR");
         Console.WriteLine("=========================================================");
     }
-    
 
-    private void CardUmschalten() 
+
+    private void CardUmschalten()
     {
         Console.WriteLine($"Bits & Bites-Card ist jetzt {(aktuelleBestellung.KarteUmschalten() ? "aktiv" : "inaktiv")}");
     }
-    private void BestellungUebermitteln() 
+    private void BestellungUebermitteln()
     {
         if (aktuelleBestellung.Bestellposten.Count == 0)
         {
@@ -214,7 +233,7 @@ public class KonsoleMenue
             {
                 Console.Write("Ungültige Eingabe. Bitte eine Zahl eingeben: ");
             }
-           
+
             else
             {
                 return zahl;

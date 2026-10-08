@@ -1,21 +1,31 @@
 ﻿namespace BitsAndBites;
-
+public enum Bestellstatus { Offen, Uebermittelt, Bezahlt }
 public class  Bestellung
 {
+   
     const double CARD_RABATT = 0.05; // 5% Rabatt
     private bool bitandbitecard;
     public bool Bitandbitecard => bitandbitecard;
-
+    
     private List<Posten> bestellposten;
+
+    private Bestellstatus status;
+    public Bestellstatus Status => status;
+
     public Bestellung(bool bitandbitecard)
     {
         this.bitandbitecard = bitandbitecard;
         bestellposten = new List<Posten>();
+        status = Bestellstatus.Offen;
     }
     
     public void FuegePostenHinzu(Posten posten)
     {
         ArgumentNullException.ThrowIfNull(posten);
+        if (status != Bestellstatus.Offen)
+        {
+            throw new InvalidOperationException("Bestellungen können nur im Status 'Offen' bearbeitet werden.");
+        }
         bestellposten.Add(posten);
     }
 
