@@ -184,11 +184,16 @@ public class KonsoleMenue
     }
     private void BestellungUebermitteln()
     {
-        if (aktuelleBestellung.Bestellposten.Count == 0)
+        try 
         {
-            Console.WriteLine("Keine Posten in der Bestellung.");
+            aktuelleBestellung.BerechneBestellung(); // Berechnung der Bestellung, um sicherzustellen, dass alles korrekt ist
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Fehler bei der Berechnung der Bestellung: {ex.Message}");
             return;
         }
+       
         BestellungAnzeigen();
         Console.WriteLine($"Übermittelt am: {DateTime.Now:dd.MM.yyyy HH:mm:ss}");
         aktuelleBestellung = new Bestellung(false); // Neue Bestellung ohne Karte erstellen

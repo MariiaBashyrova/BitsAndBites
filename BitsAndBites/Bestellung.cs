@@ -55,6 +55,10 @@ public class  Bestellung
 
     public void EntfernePosten(int index)
     {
+        if (status != Bestellstatus.Offen)
+        {
+            throw new InvalidOperationException("Bestellungen können nur im Status 'Offen' bearbeitet werden.");
+        }
         if (index < 0 || index >= bestellposten.Count)
         {
             throw new ArgumentOutOfRangeException(nameof(index), "Index liegt außerhalb des gültigen Bereichs.");
@@ -73,5 +77,33 @@ public class  Bestellung
         double summe = bestellposten.Sum(p => p.BerechnePreis());
         double rabatt = summe * CARD_RABATT; // 5% Rabatt
         return Math.Round(rabatt, 2);
+    }
+
+    public void UebermittleBestellung()
+    {
+        if (bestellposten.Count == 0)
+        {
+            throw new InvalidOperationException("Keine Posten in der Bestellung.");
+            
+        }
+        if (status != Bestellstatus.Offen)
+        {
+            throw new InvalidOperationException("Bestellungen können nur im Status 'Offen' übermittelt werden.");
+        }
+        status = Bestellstatus.Uebermittelt;
+    }
+
+    public void BezahleBestellung()
+    {
+        if (bestellposten.Count == 0)
+        {
+            throw new InvalidOperationException("Keine Posten in der Bestellung.");
+
+        }
+        if (status != Bestellstatus.Uebermittelt)
+        {
+            throw new InvalidOperationException("Bestellungen können nur im Status 'Übermittelt' bezahlt werden.");
+        }
+        status = Bestellstatus.Bezahlt;
     }
 }
