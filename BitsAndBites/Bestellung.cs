@@ -17,15 +17,18 @@ public class  Bestellung
 
     public double BerechneBestellung()
         {
-        double summe = 0;
-        foreach (var posten in bestellposten)
-        {
-            summe += posten.BerechnePreis();
-        }
-        if (bitandbitecard)
-        {
-            summe *= 0.95; // 5% Rabatt
-        }
-        return summe;
+        //double summe = 0;
+        //foreach (var posten in bestellposten)
+        //{
+        //    summe += posten.BerechnePreis();
+        //}
+        //if (bitandbitecard)
+        //{
+        //    summe *= 0.95; // 5% Rabatt
+        //}
+        //return summe;
+        double summe = bestellposten.Sum(p => p.BerechnePreis());
+        summe *= bitandbitecard ? 0.95 : 1; // 5% Rabatt, wenn bitandbitecard true ist
+        return Math.Round(summe, 2);
     }
 }
