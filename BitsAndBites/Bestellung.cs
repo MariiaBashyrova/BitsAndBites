@@ -12,6 +12,7 @@ public class  Bestellung
     
     public void FuegePostenHinzu(Posten posten)
     {
+        ArgumentNullException.ThrowIfNull(posten);
         bestellposten.Add(posten);
     }
 
@@ -30,5 +31,11 @@ public class  Bestellung
         double summe = bestellposten.Sum(p => p.BerechnePreis());
         summe *= bitandbitecard ? 0.95 : 1; // 5% Rabatt, wenn bitandbitecard true ist
         return Math.Round(summe, 2);
+    }
+
+    public bool KarteUmschalten()
+    {
+        bitandbitecard = !bitandbitecard;
+        return bitandbitecard;
     }
 }
