@@ -43,6 +43,7 @@ public class  Bestellung
         //return summe;
         double summe = bestellposten.Sum(p => p.BerechnePreis());
         summe *= bitandbitecard ?  1 - CARD_RABATT : 1; // 5% Rabatt, wenn bitandbitecard true ist
+        summe = Math.Max(0, summe);                     // Sicherstellen, dass die Summe nicht negativ ist
         return Math.Round(summe, 2);
     }
 

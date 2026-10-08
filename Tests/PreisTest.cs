@@ -60,5 +60,36 @@ public class PreisTest
         double ergebnis = bestellung.BerechneBestellung();
         Assert.Equal(erwartet, ergebnis, GENAUIGKEIT);
     }
+    [Fact]
+    public void Gutschein_MitPositivemPreis_WirftException()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
+        {
+            new Gutschein("10-Euro-Gutschein", 10);
+        });
+    }
+    [Fact]
+    public void Gutschein_MitNegativemPreis_WirdErstellt()
+    {
+        var gutschein = new Gutschein("10-Euro-Gutschein", -10);
 
+        Assert.NotNull(gutschein);
+    }
+    [Theory]
+    [InlineData(true, false, 3.20)]
+    [InlineData(true, true, 3.04)]
+    [InlineData(false, true, 0.00)]
+    public void TestBestellungMitGutschein(bool mitPosten, bool BonusCard, double erwartet)
+    {
+        Bestellung bestellung = new Bestellung(BonusCard);
+        if (mitPosten)
+        {
+            bestellung.FuegePostenHinzu(new Getraenk("Bier", 4.00, true, true)); //3.00
+            bestellung.FuegePostenHinzu(new Essen("Pizza", 8.50, true)); //10.20
+            bestellung.FuegePostenHinzu(new Gutschein("10-Euro-Gutschein", -10)); //-10.00
+        }
+
+        double ergebnis = bestellung.BerechneBestellung();
+        Assert.Equal(erwartet, ergebnis, GENAUIGKEIT);
+    }
 }
