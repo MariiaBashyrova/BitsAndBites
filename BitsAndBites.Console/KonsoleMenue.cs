@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using BitsAndBites;
 
 namespace BitsAndBites.KonsolenApp;
-public enum MenuePunkt { GetraenkHinzufuegen = 1, EssenHinzufuegen, TicketHinzufuegen, PostenEntfernen, Anzeigen, CardUmschalten, Uebermitteln, Beenden }
+public enum MenuePunkt { GetraenkHinzufuegen = 1, EssenHinzufuegen, TicketHinzufuegen, PostenEntfernen, Anzeigen, CardUmschalten, StudentenRabatt, Uebermitteln, Beenden }
 public class KonsoleMenue
 {
 
@@ -48,6 +48,10 @@ public class KonsoleMenue
                     CardUmschalten();
                     break;
 
+                case MenuePunkt.StudentenRabatt:
+                    StudentenRabattUmschalten();
+                    break;
+
                 case MenuePunkt.Uebermitteln:
                     BestellungUebermitteln();
                     break;
@@ -73,8 +77,9 @@ public class KonsoleMenue
         Console.WriteLine("4. Posten entfernen");
         Console.WriteLine("5. Bestellung anzeigen");
         Console.WriteLine("6. Bits & Bites-Card an/aus");
-        Console.WriteLine("7. Bestellung an die Theke übermitteln");
-        Console.WriteLine("8. Beenden");
+        Console.WriteLine("7. Studenten Rabatt an");
+        Console.WriteLine("8. Bestellung an die Theke übermitteln");
+        Console.WriteLine("9. Beenden");
 
     }
 
@@ -167,11 +172,15 @@ public class KonsoleMenue
             Console.WriteLine($"{posten.GetDetails(),-43}  {posten.BerechnePreis(),8:F2} EUR");
         }
         Console.WriteLine("---------------------------------------------------------");
-        if (aktuelleBestellung.Bitandbitecard)
+        if (aktuelleBestellung.RabattStrategie is not null)
         {
-            double rabatt = aktuelleBestellung.BerechneCardRabatt();
-            Console.WriteLine($"Card-Rabatt:                                -{rabatt,8:F2} EUR");
+            double rabatt = aktuelleBestellung.BerechneRabatt();
+            if (rabatt > 0)
+            {
+                Console.WriteLine($"{aktuelleBestellung.RabattStrategie.Name,-44}:{rabatt,8:F2} EUR");
+            }
         }
+        
 
         Console.WriteLine($"Gesamtbetrag:                                {aktuelleBestellung.BerechneBestellung(),8:F2} EUR");
         Console.WriteLine("=========================================================");
@@ -181,6 +190,12 @@ public class KonsoleMenue
     private void CardUmschalten()
     {
         Console.WriteLine($"Bits & Bites-Card ist jetzt {(aktuelleBestellung.KarteUmschalten() ? "aktiv" : "inaktiv")}");
+    }
+
+    private void StudentenRabattUmschalten()
+    {
+        aktuelleBestellung.SetzeRabattStrategie(new StudentenRabatt());
+        Console.WriteLine("Studentenrabatt ist jetzt aktiv.");
     }
     private void BestellungUebermitteln()
     {

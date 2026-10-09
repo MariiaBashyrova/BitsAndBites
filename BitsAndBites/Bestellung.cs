@@ -2,23 +2,38 @@
 public enum Bestellstatus { Offen, Uebermittelt, Bezahlt }
 public class  Bestellung
 {
-   
-    const double CARD_RABATT = 0.05; // 5% Rabatt
-    private bool bitandbitecard;
-    public bool Bitandbitecard => bitandbitecard;
+    //const double CARD_RABATT = 0.05; // 5% Rabatt
+    //private bool bitandbitecard;
+    //public bool Bitandbitecard => bitandbitecard;
     
     private List<Posten> bestellposten;
 
     private Bestellstatus status;
     public Bestellstatus Status => status;
 
+    private iRabattStrategie rabattStrategie; // nur eine Rabattstrategie zur Zeit
+
+    public iRabattStrategie RabattStrategie => rabattStrategie;
+
     public Bestellung(bool bitandbitecard)
     {
-        this.bitandbitecard = bitandbitecard;
+       // this.bitandbitecard = bitandbitecard;
+        if (bitandbitecard) 
+        {
+            rabattStrategie = new CardRabatt();
+        }
+        else
+        {
+            rabattStrategie = new KeinRabatt();
+        }
         bestellposten = new List<Posten>();
         status = Bestellstatus.Offen;
     }
     
+    public void SetzeRabattStrategie(iRabattStrategie strategie)
+    {
+        rabattStrategie = strategie ?? throw new ArgumentNullException(nameof(strategie));
+    }
     public void FuegePostenHinzu(Posten posten)
     {
         ArgumentNullException.ThrowIfNull(posten);
@@ -42,15 +57,20 @@ public class  Bestellung
         //}
         //return summe;
         double summe = bestellposten.Sum(p => p.BerechnePreis());
-        summe *= bitandbitecard ?  1 - CARD_RABATT : 1; // 5% Rabatt, wenn bitandbitecard true ist
+        //summe *= bitandbitecard ?  1 - CARD_RABATT : 1; // 5% Rabatt, wenn bitandbitecard true ist
+        if (rabattStrategie != null)
+        {
+            summe = rabattStrategie.WendeAn(summe);     // Rabattstrategie anwenden, wenn sie gesetzt ist
+        }
         summe = Math.Max(0, summe);                     // Sicherstellen, dass die Summe nicht negativ ist
         return Math.Round(summe, 2);
     }
 
     public bool KarteUmschalten()
     {
-        bitandbitecard = !bitandbitecard;
-        return bitandbitecard;
+        rabattStrategie = rabattStrategie is CardRabatt ? new KeinRabatt() : new CardRabatt();
+        
+        return rabattStrategie is CardRabatt;
     }
 
     public void EntfernePosten(int index)
@@ -68,14 +88,16 @@ public class  Bestellung
 
     public List<Posten> Bestellposten => new List<Posten>(bestellposten); // Gibt eine Kopie der Liste zurück, um die Kapselung zu wahren
 
-    public double BerechneCardRabatt()
+    public double BerechneRabatt()
     {
-        if (!bitandbitecard)
-        {
-            return 0;
-        }
         double summe = bestellposten.Sum(p => p.BerechnePreis());
-        double rabatt = summe * CARD_RABATT; // 5% Rabatt
+        double summeR = summe; // Standardmäßig keine Rabattstrategie angewendet
+        if (rabattStrategie != null)
+        {
+            summeR = Math.Max(0, rabattStrategie.WendeAn(summe));     // Rabattstrategie anwenden, wenn sie gesetzt ist
+        }
+        
+        double rabatt = Math.Max(0, summe - summeR); 
         return Math.Round(rabatt, 2);
     }
 
